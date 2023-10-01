@@ -1,6 +1,16 @@
 // import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, View, Button, TextInput, Alert, FlatList, SafeAreaView, StatusBar } from "react-native";
+import { 
+  Button, 
+  FlatList, 
+  Text, 
+  TextInput, 
+  SafeAreaView, 
+  StatusBar, 
+  StyleSheet, 
+  TouchableOpacity,
+  View, 
+} from "react-native";
 
 const DATA = [
   {
@@ -20,14 +30,9 @@ const DATA = [
   }
 ]
 
-const TodoItem = (props) => {
-  // console.log(props.item.title)
-  return (
-    <View style={styles.item}>
-      <Text style={styles.itemText}>{props.item.title}</Text>
-    </View>
-  )
-}
+
+
+
 /*
 // ALTERNATE METHOD: USING A FUNCTION INSTEAD OF ARROW FUNCTION. ALLOWS FOR PLACEMENT ANYWHERE WITHIN COMPONENT.
 
@@ -52,6 +57,25 @@ export default function App() {
 
     setItems([...items, newTodo]);
     setText("");
+  }
+
+  const markItemCompleted = (item) => {
+    const itemIndex = items.findIndex(currItem => currItem.id === item.id)
+    // console.log(itemIndex)
+    if (itemIndex !== -1) {
+      const updatedItems = [...items]
+      updatedItems[itemIndex] = {...items[itemIndex], completed: !items[itemIndex].completed}
+      setItems(updatedItems)
+    }
+  }
+
+  const TodoItem = (props) => {
+    // console.log(props.item.title)
+    return (
+      <TouchableOpacity style={styles.item} onPress={() => markItemCompleted(props.item)}>
+        <Text style={props.item.completed ? styles.itemTextCompleted : styles.itemText}>{props.item.title}</Text>
+      </TouchableOpacity>
+    )
   }
 
   return (
@@ -106,5 +130,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: "#FFF"
+  },
+  itemTextCompleted: {
+    color: "#FFF",
+    textDecorationLine: 'line-through'
   }
 });
