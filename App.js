@@ -18,6 +18,7 @@ import {styles} from './App.style.js'
 
 // Import Icons
 import { Ionicons } from '@expo/vector-icons'; 
+import { render } from "react-dom";
 
 
 
@@ -26,16 +27,19 @@ const DATA = [
     id: '1',
     title: 'Meditation',
     completed: false,
+    color: "#EBC58C"
   },
   {
     id: '2',
     title: 'Coding',
     completed: false,
+    color: "#6DB6DD"
   },
   {
     id: '3',
     title: 'Journeling',
     completed: false,
+    color: "#BC96E6"
   }
 ]
 
@@ -62,7 +66,8 @@ export default function App() {
     let newTodo = {
       id: items.length + 1,
       title: text,
-      completed: false
+      completed: false,
+      color: "#62B599"
     }
 
     setItems([...items, newTodo]);
@@ -83,38 +88,43 @@ export default function App() {
   const TodoItem = (props) => {
     // console.log(props.item.title)
     return (
-      <TouchableOpacity style={styles.item} onPress={() => markItemCompleted(props.item)}>
+      <TouchableOpacity style={[styles.item, { backgroundColor: props.item.color }]} onPress={() => markItemCompleted(props.item)}>
         <Text style={props.item.completed ? styles.itemTextCompleted : styles.itemText}>{props.item.title}</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  const renderAddButton = () => {
+    return (
+      <TouchableOpacity onPress={() => setIsModalVisible(true)}>
+        <View style={styles.icon}>
+          <Ionicons name="add" size={24} color="#652E00" />
+        </View>
       </TouchableOpacity>
     )
   }
 
   return (
     <SafeAreaView style={styles.container}>
-    <TouchableOpacity onPress={() => setIsModalVisible(true)}>
-      <View style={styles.icon}>
-        <Ionicons name="add" size={24} color="#652E00" />
-      </View>
-    </TouchableOpacity>
-    <Modal 
-      visible={isModalVisible} 
-      transparent={true}
-      onRequestClose={() => setIsModalVisible(!isModalVisible)}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView} >
-          <TextInput 
-            style={styles.input} 
-            onChangeText={setText}
-            value={text}
-          />
-          <Button
-            title="Add ToDo"
-            onPress={addNewTodo}
-          />
+      <Modal 
+        visible={isModalVisible} 
+        transparent={true}
+        onRequestClose={() => setIsModalVisible(!isModalVisible)}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView} >
+            <TextInput 
+              style={styles.input} 
+              onChangeText={setText}
+              value={text}
+            />
+            <Button
+              title="Add ToDo"
+              onPress={addNewTodo}
+            />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
       <StatusBar style="auto" />
       <FlatList
         data={items}
@@ -122,6 +132,7 @@ export default function App() {
         style={styles.list}
         // keyExtractor={(item, index) => index} // ANOTHER METHOD TO THE ABOVE
         renderItem={({item}) => <TodoItem item={item} />}
+        ListFooterComponent={renderAddButton}
       />
     </SafeAreaView>
   );

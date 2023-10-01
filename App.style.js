@@ -69,7 +69,8 @@ export const styles = StyleSheet.create({
       elevation: 5,
       display: 'flex',
       justifyContent: 'center',
-      alignItems: 'center'
+      alignItems: 'center',
+      alignSelf: 'center'
     }
   
   });
