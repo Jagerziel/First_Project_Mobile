@@ -3,6 +3,7 @@ import { useState } from "react";
 import { 
   Button, 
   FlatList, 
+  Modal,
   Text, 
   TextInput, 
   SafeAreaView, 
@@ -47,6 +48,7 @@ function TodoItem (props) {
 export default function App() {
   const [items, setItems] = useState(DATA)
   const [text, setText] = useState("")
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const addNewTodo = () => {
     let newTodo = {
@@ -57,6 +59,7 @@ export default function App() {
 
     setItems([...items, newTodo]);
     setText("");
+    setIsModalVisible(false)
   }
 
   const markItemCompleted = (item) => {
@@ -80,18 +83,27 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Hello World!</Text>
-      <Text>Testing Change!</Text>
+    <Button title='add an item' onPress={() => setIsModalVisible(true)} />
+    <Modal 
+      visible={isModalVisible} 
+      transparent={true} 
+      onRequestClose={() => setIsModalVisible(!isModalVisible)}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setText}
+            value={text}
+          />
+          <Button
+            title="Add ToDo"
+            onPress={addNewTodo}
+          />
+        </View>
+      </View>
+    </Modal>
       <StatusBar style="auto" />
-      <TextInput 
-        style={styles.input} 
-        onChangeText={setText}
-        value={text}
-      />
-      <Button
-        title="Add ToDo"
-        onPress={addNewTodo}
-      />
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
@@ -134,5 +146,27 @@ const styles = StyleSheet.create({
   itemTextCompleted: {
     color: "#FFF",
     textDecorationLine: 'line-through'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   }
+
 });
